@@ -3,29 +3,33 @@ package accounts;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * После добавления работы БД этот класс не нужен.
+ */
+
 public class AccountService {
-    private final Map<String, UserProfile> loginToProfile;
-    private final Map<String, UserProfile> sessionIdToProfile;
+    private final Map<String, Users> loginToProfile;
+    private final Map<String, Users> sessionIdToProfile;
 
     public AccountService() {
         loginToProfile = new HashMap<>();
         sessionIdToProfile = new HashMap<>();
     }
 
-    public void addNewUser(UserProfile userProfile) {
-        loginToProfile.put(userProfile.getLogin(), userProfile);
+    public void addNewUser(Users users) {
+        loginToProfile.put(users.getLogin(), users);
     }
 
-    public UserProfile getUserByLogin(String login) {
+    public Users getUserByLogin(String login) {
         return loginToProfile.get(login);
     }
 
-    public UserProfile getUserBySessionId(String sessionId) {
+    public Users getUserBySessionId(String sessionId) {
         return sessionIdToProfile.get(sessionId);
     }
 
-    public void addSession(String sessionId, UserProfile userProfile) {
-        sessionIdToProfile.put(sessionId, userProfile);
+    public void addSession(String sessionId, Users users) {
+        sessionIdToProfile.put(sessionId, users);
     }
 
     public void deleteSession(String sessionId) {

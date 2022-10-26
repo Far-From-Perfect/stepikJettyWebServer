@@ -1,7 +1,7 @@
 package servlets;
 
-import accounts.AccountService;
-import accounts.UserProfile;
+import accounts.Users;
+import dbService.DBService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,14 +11,14 @@ import java.io.IOException;
 
 /**
  * Сервлет отвечает за получение POST запроса и возвращение ответа Авторизован/Не авторизован.
- * Он проверяет наличие пользователя в БД (в данном примере в HashMap) и возвращает ответ.
+ * Он проверяет наличие пользователя в БД и возвращает ответ.
  * Здесь реализован минимум проверок для сдачи задания.
  */
 public class SignInServlet extends HttpServlet {
-    private final AccountService accountService;
+    private final DBService service;
 
-    public SignInServlet(AccountService accountService) {
-        this.accountService = accountService;
+    public SignInServlet(DBService service) {
+        this.service = service;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class SignInServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return;
         }
-        UserProfile profile = accountService.getUserByLogin(login);
+        Users profile = service.getUserName(login);
 
         response.setContentType("text/html;charset=utf-8");
         if(profile == null) {

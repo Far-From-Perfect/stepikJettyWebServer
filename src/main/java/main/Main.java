@@ -1,6 +1,6 @@
 package main;
 
-import accounts.AccountService;
+import dbService.DBService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -9,11 +9,11 @@ import servlets.SignUpServlet;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        AccountService accountService = new AccountService();
+        DBService service = new DBService();
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new SignUpServlet(accountService)), "/signup");
-        context.addServlet(new ServletHolder(new SignInServlet(accountService)), "/signin");
+        context.addServlet(new ServletHolder(new SignUpServlet(service)), "/signup");
+        context.addServlet(new ServletHolder(new SignInServlet(service)), "/signin");
 
         Server server = new Server(8080);
         server.setHandler(context);

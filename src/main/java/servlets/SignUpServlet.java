@@ -1,7 +1,7 @@
 package servlets;
 
-import accounts.AccountService;
-import accounts.UserProfile;
+import dbService.DBException;
+import dbService.DBService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,15 +10,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Сервлет отвечает за получение POST запроса и добавление нового юзера в БД (вместо БД в примере используется HashMap).
+ * Сервлет отвечает за получение POST запроса и добавление нового юзера в БД.
  * Данный сервлет не проверяет на наличие уже существующего пользователя также отсутствует ряд других важных проверок.
  * Сервлет создан для выполнения конкретной задачи.
  */
 public class SignUpServlet extends HttpServlet {
-    private final AccountService accountService;
 
-    public SignUpServlet(AccountService accountService) {
-        this.accountService = accountService;
+    private final DBService service;
+
+    public SignUpServlet(DBService service) {
+        this.service = service;
     }
 
     @Override
@@ -32,8 +33,11 @@ public class SignUpServlet extends HttpServlet {
             return;
         }
 
-        UserProfile profile = new UserProfile(login, pass, login);
-        accountService.addNewUser(profile);
+        try {
+            long id = service.addUser(login, pass);
+        } catch (DBException e) {
+            throw new RuntimeException(e);
+        }
         response.setStatus(HttpServletResponse.SC_OK);
     }
 }
